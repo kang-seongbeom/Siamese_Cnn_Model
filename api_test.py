@@ -16,6 +16,7 @@ import torch.nn.functional as F
 from PIL import Image
 from flask import Flask, request
 import json
+import io
 
 class Config():
     # fnid =_src, comapare_src와 경로 맞춰야 함
@@ -78,6 +79,7 @@ class GetTwoData(Dataset):
         img1_tuple = self.compare_img
 
         img0 = Image.open(img0_tuple[0])
+        print(type(img0))
         img1 = Image.open(img1_tuple[0])
         img0 = img0.convert("L")
         img1 = img1.convert("L")
@@ -101,6 +103,16 @@ app = Flask (__name__)
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
+    
+@app.route('/photo', methods=['POST'])
+def photo():
+    img_byte = request.files['img'].read()
+    print("type : ",type(img_byte))
+    data_io = io.BytesIO(img_byte)
+    img = Image.open(data_io)
+    print(type(img))
+    
+    return "end" 
     
 @app.route('/siamese', methods=['POST'])
 def siamese():
