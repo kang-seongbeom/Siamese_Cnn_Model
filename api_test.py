@@ -106,25 +106,16 @@ def hello_world():
     
 @app.route('/photo', methods=['POST'])
 def photo():
-    img_byte = request.files['img'].read()
+    img_byte = request.files[Config.get_fine_key].read()
     print("type : ",type(img_byte))
     data_io = io.BytesIO(img_byte)
     img = Image.open(data_io)
-    print(type(img))
+    img_type = str(type(img))
     
-    return "end" 
+    return img_type
     
 @app.route('/siamese', methods=['POST'])
 def siamese():
-    # 값 전달받기
-    params = json.loads(request.get_data(), encoding='utf-8')
-    if len(params) == 0:
-        return 'No parameter'
-    
-    get_value = params[Config.get_fine_key]
-    print("file_url : ", get_value)
-    
-    
     result_dict = dict()
 
     find_src = ".\images1\Training\s15\다운로드 (32).jpg"
